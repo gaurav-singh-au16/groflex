@@ -5,7 +5,7 @@ const getUser = async (req, res) => {
     try {
         const users = await User.findAll(
             {
-                attributes: ["id", "first_name", "last_name", "gender", "dob", "city", "zip", "interest", "profile_image"],
+                attributes: ["id", "first_name", "last_name", "email", "gender", "dob", "city", "zip", "interest", "profile_image"],
 
             }
         )
@@ -20,7 +20,7 @@ const getUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
     try {
-        const { first_name, last_name, gender, dob, city, zip, interest, profile_image, password } = req.body
+        const { first_name, last_name, email, gender, dob, city, zip, interest, profile_image, password } = req.body
 
         if (!first_name || !last_name || !gender || !dob || !city || !zip) {
             return res.status(500).json({ success: false, message: 'fill all required fields!' })
@@ -30,6 +30,7 @@ const registerUser = async (req, res) => {
             {
                 first_name,
                 last_name,
+                email,
                 gender,
                 dob,
                 city,
