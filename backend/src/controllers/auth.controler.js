@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const User = require("../schemas/user.schema")
 
 const secretKey = process.env.SECRET_KEY

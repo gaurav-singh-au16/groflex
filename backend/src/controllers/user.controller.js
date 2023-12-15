@@ -1,11 +1,13 @@
+const bcrypt = require('bcrypt');
 const User = require("../schemas/user.schema")
+
 
 const getUser = async (req, res) => {
 
     try {
         const users = await User.findAll(
             {
-                attributes: ["id", "first_name", "last_name", "email", "gender", "dob", "city", "zip", "interest", "profile_image"],
+                attributes: ["id", "first_name", "last_name", "email", "gender", "dob", "country", "state", "city", "zip", "interest", "profile_image"],
 
             }
         )
@@ -20,11 +22,13 @@ const getUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
     try {
-        const { first_name, last_name, email, gender, dob, city, zip, interest, profile_image, password } = req.body
+        const { first_name, last_name, email, gender, dob, city, zip, interest, profile_image, password, country, state } = req.body
 
-        if (!first_name || !last_name || !gender || !dob || !city || !zip) {
+        if (!first_name || !last_name || !gender || !dob || !city || !zip || !password || !country || !state) {
             return res.status(500).json({ success: false, message: 'fill all required fields!' })
         }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const addUser = await User.create(
             {
@@ -37,7 +41,9 @@ const registerUser = async (req, res) => {
                 zip,
                 interest,
                 profile_image,
-                password: hashedPassword
+                password: hashedPassword,
+                country, 
+                state
             }
         )
 
@@ -49,7 +55,7 @@ const registerUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const { id, first_name, last_name, gender, dob, city, zip, interest, profile_image, password } = req.body
+        const { id, first_name, last_name, gender, dob, city, zip, interest, profile_image, password, country, state } = req.body
         const updateUser = await User.update(
             {
                 first_name,
@@ -60,7 +66,9 @@ const updateUser = async (req, res) => {
                 zip,
                 interest,
                 profile_image,
-                password
+                password,
+                country,
+                state
             },
             {
                 where: { id: id }

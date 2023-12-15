@@ -27,7 +27,15 @@ const User = db.define('users', {
         comment: '0=>Male, 1=>female'
     },
     dob: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    country: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    state: {
+        type: DataTypes.STRING,
         allowNull: false
     },
     city: {
