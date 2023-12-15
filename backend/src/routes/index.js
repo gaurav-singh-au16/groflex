@@ -1,16 +1,17 @@
 const express = require('express');
 const { getUser, registerUser, updateUser, removeUser } = require('../controllers/user.controller');
 const { login, forgotPassword } = require('../controllers/auth.controler');
+const authenticateToken = require('../middlewares/access.middleware');
 
 const Router = express.Router
 const route = Router();
 
 // users
 
-route.get('/api/users', getUser)
+route.get('/api/users', authenticateToken, getUser)
 route.post('/api/register', registerUser)
-route.put('/api/users', updateUser)
-route.delete('/api/users', removeUser)
+route.put('/api/users',authenticateToken, updateUser)
+route.delete('/api/users',authenticateToken, removeUser)
 
 // auth
 

@@ -1,6 +1,6 @@
 const User = require("../schemas/user.schema")
 
-
+const secretKey = process.env.SECRET_KEY
 const login = async (req, res) => {
     try {
         const { email, password } = req.body
@@ -13,8 +13,10 @@ const login = async (req, res) => {
         })
 
         if (findUser) {
+            const userData = {first_name: findUser.first_name, id: findUser.id, email:findUser.email} 
             // jwt token
-            let token
+            const token = jwt.sign(userData, secretKey);
+          
             return res.status(500).json({ success: true, message: 'user login successfully!', token: token, data: findUser })
         } else {
             return res.status(500).json({ success: false, message: 'no user found!' })

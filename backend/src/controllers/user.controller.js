@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
                 zip,
                 interest,
                 profile_image,
-                password
+                password: hashedPassword
             }
         )
 
