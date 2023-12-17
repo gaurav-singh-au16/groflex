@@ -120,7 +120,6 @@ const EditModal = ({ isOpen, onClose, onSave, userData }) => {
 
     useEffect(() => {
         if (userData) {
-            // Check if any relevant property has changed, e.g., userData.id
             const hasUserDataChanged = userData.id !== formik.values.id;
 
             if (hasUserDataChanged) {
@@ -141,8 +140,8 @@ const EditModal = ({ isOpen, onClose, onSave, userData }) => {
                 const blob = new Blob([arrayBufferView], { type: 'image/jpeg' });
 
                 // Log the Blob data and URL for debugging
-                console.log('Blob Data:', userData.profile_image);
-                console.log('Blob URL:', URL.createObjectURL(blob));
+                // console.log('Blob Data:', userData.profile_image);
+                // console.log('Blob URL:', URL.createObjectURL(blob));
 
                 const dataUrl = URL.createObjectURL(blob);
 
@@ -150,7 +149,7 @@ const EditModal = ({ isOpen, onClose, onSave, userData }) => {
                 setPreviewImage(dataUrl);
             }
         }
-    }, [userData, formik.values.id]);
+    }, [userData, formik.values.id, formik]);
 
 
 

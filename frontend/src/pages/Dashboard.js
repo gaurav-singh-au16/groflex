@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Table,
   Thead,
@@ -11,15 +11,16 @@ import {
   TableContainer,
   Button,
   IconButton,
+  VStack,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { FaEdit, FaTrash, FaLock } from 'react-icons/fa';
 import axios from 'axios';
-import EditUserModal from '../components/EditUserModal';
 import DeleteModal from '../components/DeleteModal';
 import { useToast } from '@chakra-ui/react'
 import PasswordModal from '../components/PasswordModal';
 import EditModal from '../components/EditModal';
+import Navbar from '../components/Navbar';
 
 const Dashboard = () => {
   const toast = useToast()
@@ -35,9 +36,9 @@ const Dashboard = () => {
 
   const itemsPerPage = 5;
 
-  const fetchData = async () => {
+  const fetchData =  useCallback(async() => {
     try {
-      const response = await axios.get(`users?_page=${currentPage}&_limit=${itemsPerPage}`, {
+      const response = await axios.get(`users?page=${currentPage}&limit=${itemsPerPage}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -46,22 +47,11 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
+  },[currentPage, token]);
 
   useEffect(() => {
     fetchData()
-  }, [currentPage]);
-
-  // const handleEdit = (user) => {
-  //   // console.log(user)
-  //   setSelectedUser(user);
-  //   setEditModalOpen(true);
-  // };
-
-  const handleSaveEdit = (editedUser) => {
-    // Implement logic to save the edited user details
-    console.log('Saving edited user:', editedUser);
-  };
+  }, [currentPage, fetchData]);
 
   const handleDelete = async () => {
 
@@ -108,7 +98,7 @@ const Dashboard = () => {
     setIsPasswordModalOpen(true);
   };
 
-  const handleEdit = async(userData) => {
+  const handleEdit = async (userData) => {
     console.log("calling from dash", userData)
     try {
       const res = await axios.put('update-user', userData, {
@@ -159,104 +149,101 @@ const Dashboard = () => {
     }
   };
 
-  return (
-    <TableContainer>
-      <Table variant='striped' colorScheme='gray'>
-        <TableCaption>Groflex</TableCaption>
-        <Thead>
-          <Tr>
-            <Th>First Name</Th>
-            <Th>Last Name</Th>
-            <Th>Gender</Th>
-            <Th>Date of Birth</Th>
-            <Th>Country</Th>
-            <Th>State</Th>
-            <Th>City</Th>
-            <Th>Zip</Th>
-            <Th>Interest</Th>
-            <Th>Actions</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.map((item) => (
-            <Tr key={item.id}>
-              <Td>{item.first_name}</Td>
-              <Td>{item.last_name}</Td>
-              <Td>{item.gender}</Td>
-              <Td>{item.dob}</Td>
-              <Td>{item.country}</Td>
-              <Td>{item.state}</Td>
-              <Td>{item.city}</Td>
-              <Td>{item.zip}</Td>
-              <Td>{item.interest}</Td>
-              <Td>
-                <IconButton
-                  icon={<FaEdit />}
-                  colorScheme='blue'
-                  // onClick={() => handleEdit(item)}
-                  onClick={() => handleEditModal(item)}
-                  mr={2}
-                />
-                <IconButton
-                  icon={<FaTrash />}
-                  colorScheme='red'
-                  onClick={() => handleDeleteModal(item)}
-                  mr={2}
-                />
-                <IconButton
-                  icon={<FaLock />}
-                  colorScheme='purple'
-                  onClick={() => handleChangePassword(item)}
-                />
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th colSpan='11'>
-              <Button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </Button>
-              <Button
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-                disabled={data.length < itemsPerPage}
-              >
-                Next
-              </Button>
-            </Th>
-          </Tr>
-        </Tfoot>
-      </Table>
-      {/* <EditUserModal
-        isOpen={isEditModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        userData={selectedUser}
-        onSave={handleSaveEdit}
-      /> */}
-      <EditModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        userData={selectedUser}
-        onSave={handleEdit}
-      />
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        userData={selectedUser}
-        onDelete={handleDelete}
-      />
-      <PasswordModal
-        isOpen={isPasswordModalOpen}
-        onClose={() => setIsPasswordModalOpen(false)}
-        userData={selectedUser}
-        onSave={handleSavePassword}
-      />
 
-    </TableContainer>
+
+
+
+  return (
+    <>
+      <Navbar />
+      <VStack margin={6}>
+        <TableContainer>
+          <Table variant='striped' colorScheme='gray'>
+            <TableCaption>Groflex</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Name</Th>
+                <Th>Gender</Th>
+                <Th>Date of Birth</Th>
+                <Th>State City & Country</Th>
+                <Th>Zip</Th>
+                <Th>Interest</Th>
+                <Th>Actions</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {data.map((item) => (
+                <Tr key={item.id}>
+                  <Td>{item.first_name + ' ' + item.last_name}</Td>
+                  <Td>{item.gender === 0 ? 'Male' : 'Female'}</Td>
+                  <Td>{item.dob}</Td>
+                  <Td>{item.city + ', ' + item.state + ', ' + item.country}</Td>
+                  <Td>{item.zip}</Td>
+                  <Td>{item.interest === 0 ? 'Reading' : item.interest === 1 ? 'Writing' : item.interest === 2 ? 'Travelling' : item.interest === 3 ? 'Playing' : ''}</Td>
+                  <Td>
+                    <IconButton
+                      icon={<FaEdit />}
+                      colorScheme='blue'
+                      // onClick={() => handleEdit(item)}
+                      onClick={() => handleEditModal(item)}
+                      mr={2}
+                    />
+                    <IconButton
+                      icon={<FaTrash />}
+                      colorScheme='red'
+                      onClick={() => handleDeleteModal(item)}
+                      mr={2}
+                    />
+                    <IconButton
+                      icon={<FaLock />}
+                      colorScheme='purple'
+                      onClick={() => handleChangePassword(item)}
+                    />
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+            <Tfoot>
+              <Tr>
+                <Th colSpan='11'>
+                  <Button
+                    onClick={()=>setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    onClick={()=>setCurrentPage((prev) => prev + 1)}
+                    disabled={data.length < itemsPerPage}
+                  >
+                    Next
+                  </Button>
+                </Th>
+              </Tr>
+            </Tfoot>
+          </Table>
+          <EditModal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            userData={selectedUser}
+            onSave={handleEdit}
+          />
+          <DeleteModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            userData={selectedUser}
+            onDelete={handleDelete}
+          />
+          <PasswordModal
+            isOpen={isPasswordModalOpen}
+            onClose={() => setIsPasswordModalOpen(false)}
+            userData={selectedUser}
+            onSave={handleSavePassword}
+          />
+
+        </TableContainer>
+      </VStack>
+    </>
   );
 };
 

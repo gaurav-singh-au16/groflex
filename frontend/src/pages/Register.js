@@ -84,8 +84,6 @@ const Register = () => {
       password: Yup.string().required('Required').matches(/^[^\s].*[^\s]$/, 'Leading and trailing Spaces are not allowed'),
     }),
     onSubmit: (values) => {
-      // Handle form submission here
-      // console.log(values);
       submitHandler(values)
     },
   });
@@ -138,7 +136,7 @@ const Register = () => {
       profile_image: imageData,
       dob: values.dob,
     }
-    console.log(userData)
+    // console.log(userData)
     try {
       const res = await axios.post('register', userData);
       if (res.data.success) {
