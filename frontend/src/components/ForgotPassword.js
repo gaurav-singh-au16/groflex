@@ -31,7 +31,7 @@ function ForgotPassword(props) {
 
     const validationSchema = Yup.object({
         email: Yup.string().email("Invalid email address").required("Email is Required"),
-        password: Yup.string().required("password is Required"),
+        password: Yup.string().required('Password is Required').matches(/^[^\s].*[^\s]$/, 'Leading and trailing Spaces are not allowed'),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref("password"), null], "Passwords must match")
             .required("Confirm Password is Required"),

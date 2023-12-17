@@ -16,11 +16,14 @@ import { useToast } from '@chakra-ui/react'
 import { useNavigate } from "react-router-dom";
 import ForgotPassword from "../components/ForgotPassword";
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../redux/action/authActions';
 
 const Login = () => {
 
   const toast = useToast()
   let navigate = useNavigate();
+  const dispatch = useDispatch();
   const [resetModal, setResetModal] = useState(false)
 
   const validationSchema = Yup.object({
@@ -43,12 +46,14 @@ const Login = () => {
     try {
       const res = await axios.post('login', value);
       if (res.data.success) {
+        dispatch(loginSuccess(res.data.token));
         toast({
           title: 'Login Successfully.',
           status: 'success',
           duration: 9000,
           isClosable: true,
         })
+        navigate('/');
       }
     } catch (error) {
       // alert('Error');
