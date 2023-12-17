@@ -10,8 +10,8 @@ const route = Router();
 
 route.get('/api/users', authenticateToken, getUser)
 route.post('/api/register', registerUser)
-route.put('/api/users',authenticateToken, updateUser)
-route.delete('/api/users',authenticateToken, removeUser)
+route.put('/api/update-user',authenticateToken, updateUser)
+route.delete('/api/delete-user/:id',authenticateToken, removeUser)
 
 // auth
 

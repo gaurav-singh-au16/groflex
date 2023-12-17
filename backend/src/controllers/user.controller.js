@@ -3,22 +3,25 @@ const User = require("../schemas/user.schema")
 
 
 const getUser = async (req, res) => {
-
+    const { page = 1, limit = 5 } = req.query;
+    console.log('page', page)
     try {
-        const users = await User.findAll(
-            {
-                attributes: ["id", "first_name", "last_name", "email", "gender", "dob", "country", "state", "city", "zip", "interest", "profile_image"],
-
-            }
-        )
-        return res.status(200).json({ success: true, data: users })
+      const offset = (page - 1) * limit;
+  
+      const users = await User.findAll({
+        attributes: ["id", "first_name", "last_name", "email", "gender", "dob", "country", "state", "city", "zip", "interest", "profile_image"],
+        offset: offset,
+        limit: parseInt(limit),
+      });
+  
+      return res.status(200).json({ success: true, data: users });
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            error: error.message
-        })
+      return res.status(500).json({
+        success: false,
+        error: error.message,
+      });
     }
-}
+  };
 
 const registerUser = async (req, res) => {
     try {

@@ -52,7 +52,7 @@ const User = db.define('users', {
         comment: '0=>reading, 1=>writing, 2=>travelling, 3=>playing'
     },
     profile_image: {
-        type: DataTypes.BLOB,
+        type: DataTypes.BLOB('long'),
         allowNull: true
     },
     password: {
