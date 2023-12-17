@@ -3,8 +3,8 @@ const User = require("../schemas/user.schema")
 
 
 const getUser = async (req, res) => {
-    const { page = 1, limit = 5 } = req.query;
-    
+    const { page, limit } = req.query;
+    console.log('page', page)
     try {
       const offset = (page - 1) * limit;
   
