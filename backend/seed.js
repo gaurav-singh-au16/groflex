@@ -4,7 +4,7 @@ const sequelize = require('./src/helpers/db.helper');
 
 const User = require('./src/schemas/user.schema');
 
-const hashedPassword = await bcrypt.hash('admin', 10);
+const hashedPassword =  bcrypt.hash('admin', 10);
 
 const generateDummyUser = () => ({
   first_name: faker.name.firstName(),
