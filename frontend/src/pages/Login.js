@@ -44,7 +44,7 @@ const Login = () => {
 
   const loginHandler = async (value) => {
     try {
-      const res = await axios.post('login', value);
+      const res = await axios.post('https://groflex.vercel.app/api/login', value);
       if (res.data.success) {
         dispatch(loginSuccess(res.data.token));
         toast({

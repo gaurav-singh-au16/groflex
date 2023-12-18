@@ -138,7 +138,7 @@ const Register = () => {
     }
     // console.log(userData)
     try {
-      const res = await axios.post('register', userData);
+      const res = await axios.post('https://groflex.vercel.app/api/register', userData);
       if (res.data.success) {
         toast({
           title: 'Registration Successfull.',

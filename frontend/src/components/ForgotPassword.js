@@ -51,7 +51,7 @@ function ForgotPassword(props) {
 
     const resetHandler = async (value) => {
         try {
-            const res = await axios.put('forgot-password', value);
+            const res = await axios.put('https://groflex.vercel.app/api/forgot-password', value);
             if (res.data.success) {
                 toast({
                     title: 'Password Reset Successfully.',

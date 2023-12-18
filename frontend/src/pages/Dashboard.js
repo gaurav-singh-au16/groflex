@@ -38,7 +38,7 @@ const Dashboard = () => {
 
   const fetchData =  useCallback(async() => {
     try {
-      const response = await axios.get(`users?page=${currentPage}&limit=${itemsPerPage}`, {
+      const response = await axios.get(`https://groflex.vercel.app/api/users?page=${currentPage}&limit=${itemsPerPage}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -56,7 +56,7 @@ const Dashboard = () => {
   const handleDelete = async () => {
 
     try {
-      const response = await axios.delete(`delete-user/${selectedUser.id}`, {
+      const response = await axios.delete(`https://groflex.vercel.app/api/delete-user/${selectedUser.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -101,7 +101,7 @@ const Dashboard = () => {
   const handleEdit = async (userData) => {
     console.log("calling from dash", userData)
     try {
-      const res = await axios.put('update-user', userData, {
+      const res = await axios.put('https://groflex.vercel.app/api/update-user', userData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -127,7 +127,7 @@ const Dashboard = () => {
 
   const handleSavePassword = async (newPassword, confirmPassword) => {
     try {
-      const response = await axios.put(`forgot-password`, { email: selectedUser.email, password: confirmPassword });
+      const response = await axios.put(`https://groflex.vercel.app/api/forgot-password`, { email: selectedUser.email, password: confirmPassword });
       if (response.data.success) {
         fetchData()
         toast({
