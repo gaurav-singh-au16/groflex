@@ -1,8 +1,10 @@
-
+const bcrypt = require('bcrypt');
 const faker = require('faker');
 const sequelize = require('./src/helpers/db.helper');
 
 const User = require('./src/schemas/user.schema');
+
+const hashedPassword = await bcrypt.hash('admin', 10);
 
 const generateDummyUser = () => ({
   first_name: faker.name.firstName(),
@@ -15,13 +17,13 @@ const generateDummyUser = () => ({
   city: faker.address.city(),
   zip: faker.address.zipCode(),
   interest: faker.random.arrayElement([0, 1, 2, 3]),
-  password: '123'
+  password: hashedPassword
 });
 
 const seed = async () => {
   await sequelize.sync({ force: true }); 
 
-  const numberOfUsers = 10;
+  const numberOfUsers = 20;
 
   const dummyUsers = Array.from({ length: numberOfUsers }, generateDummyUser);
 
