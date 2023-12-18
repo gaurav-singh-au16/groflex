@@ -4,9 +4,8 @@ const sequelize = require('./src/helpers/db.helper');
 
 const User = require('./src/schemas/user.schema');
 
-const hashedPassword =  bcrypt.hash('admin', 10);
 
-const generateDummyUser = () => ({
+const generateDummyUser = (hashedPassword) => ({
   first_name: faker.name.firstName(),
   last_name: faker.name.lastName(),
   email: faker.internet.email(),
@@ -25,7 +24,9 @@ const seed = async () => {
 
   const numberOfUsers = 20;
 
-  const dummyUsers = Array.from({ length: numberOfUsers }, generateDummyUser);
+  const hashedPassword =  await bcrypt.hash('admin', 10);
+
+  const dummyUsers = Array.from({ length: numberOfUsers }, generateDummyUser(hashedPassword));
 
   await User.bulkCreate(dummyUsers);
 
