@@ -22,7 +22,7 @@ const User = db.define('users', {
         allowNull: false
     },
     gender: {
-        type: DataTypes.TINYINT,
+        type: DataTypes.INTEGER,
         allowNull: false,
         comment: '0=>Male, 1=>female'
     },
@@ -47,7 +47,7 @@ const User = db.define('users', {
         allowNull: false
     },
     interest: {
-        type: DataTypes.TINYINT,
+        type: DataTypes.INTEGER,
         allowNull: true,
         comment: '0=>reading, 1=>writing, 2=>travelling, 3=>playing'
     },
