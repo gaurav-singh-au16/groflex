@@ -26,7 +26,7 @@ const seed = async () => {
 
   const hashedPassword =  await bcrypt.hash('admin', 10);
 
-  const dummyUsers = Array.from({ length: numberOfUsers }, generateDummyUser(hashedPassword));
+  const dummyUsers = Array.from({ length: numberOfUsers }, ()=>generateDummyUser(hashedPassword));
 
   await User.bulkCreate(dummyUsers);
 
